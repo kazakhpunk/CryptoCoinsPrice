@@ -21,7 +21,7 @@ class UserCredentials(BaseModel):
 
 
 @router.post("/token", response_model=Token, summary="Login and obtain access token", description="Authenticate user and return an access token. ")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_db)):
     query = select(User).where(User.email == form_data.username)
     result = await db.execute(query)
     user = result.scalars().first()
@@ -39,8 +39,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/register", response_model=Token, summary="Register a new user", description="Create a new user account and return an access token. ")
-async def register_user(credentials: UserCredentials = Body(...)):
+@router.post("/register", response_model=Token, summary="Register a new user", description="Create a new user account and return an access token.")
+async def register_user(credentials: UserCredentials = Body(...), db: AsyncSession = Depends(get_async_db)):
     query = select(User).where(User.email == credentials.email)
     result = await db.execute(query)
     user = result.scalars().first()
@@ -62,6 +62,6 @@ async def register_user(credentials: UserCredentials = Body(...)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/me", summary="Get current user information", description="Retrieve the details of the currently authenticated user. Endpoint is protected and only accessible to authenticated users.")
+@router.get("/me", summary="Get current user information", description="Retrieve the details of the currently authenticated user.")
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
