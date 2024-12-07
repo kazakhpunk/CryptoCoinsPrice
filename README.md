@@ -8,9 +8,12 @@ A FastAPI-based REST API that integrates with CoinGecko's API to fetch and manag
 docker-compose up --build
 ```
 
-## 🌐 Live Hosting
+## 🌐 Live Demo & Documentation
 
-The API is deployed and accessible at: [https://cryptocoinsprice.onrender.com](https://cryptocoinsprice.onrender.com)
+- **Live API**: [https://cryptocoinsprice.onrender.com](https://cryptocoinsprice.onrender.com)
+- **API Documentation**:
+  - Swagger UI: [https://cryptocoinsprice.onrender.com/docs](https://cryptocoinsprice.onrender.com/docs)
+  - ReDoc: [https://cryptocoinsprice.onrender.com/redoc](https://cryptocoinsprice.onrender.com/redoc)
 
 ## 📚 Table of Contents
 
