@@ -14,8 +14,8 @@ services:
     networks:
       - default
 
-  redis:
-    image: redis:7
+  # redis:
+  #   image: redis:7
 
   web:
     build: .
@@ -26,20 +26,20 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - redis
+      # - redis
     env_file:
       - .env
 
-  celery:
-    build: .
-    command: celery -A app.celery:celery_app worker --loglevel=info
-    volumes:
-      - ./src:/app
-    depends_on:
-      - db
-      - redis
-    env_file:
-      - .env
+  # celery:
+  #   build: .
+  #   command: celery -A app.celery:celery_app worker --loglevel=info
+  #   volumes:
+  #     - ./src:/app
+  #   depends_on:
+  #     - db
+  #     # - redis
+  #   env_file:
+  #     - .env
 
 volumes:
   postgres_data:

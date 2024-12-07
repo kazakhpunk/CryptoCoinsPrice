@@ -18,7 +18,7 @@ load_dotenv(Path(__file__).parent.parent / '.env')
 app = FastAPI()
 
 
-redis_client = aioredis.from_url(settings.redis_url)
+# redis_client = aioredis.from_url(settings.redis_url)
 
 
 @app.on_event("startup")
@@ -38,12 +38,12 @@ async def check_health(db: AsyncSession = Depends(get_async_db)):
         await db.execute(text("SELECT 1"))
     except OperationalError:
         raise HTTPException(status_code=500, detail="Database connection failed")
-    try:
-        await redis_client.ping()
-    except (aioredis.ConnectionError, aioredis.TimeoutError):
-        raise HTTPException(status_code=500, detail="Redis connection failed")
+    # try:
+    #     await redis_client.ping()
+    # except (aioredis.ConnectionError, aioredis.TimeoutError):
+    #     raise HTTPException(status_code=500, detail="Redis connection failed")
 
-    return {"status": "ok", "database": "connected", "redis": "connected"}
+    return {"status": "ok", "database": "connected", "redis": "not connected"}
 
 
 app.include_router(auth_router, prefix="/auth", tags=["auth"])

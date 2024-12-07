@@ -20,7 +20,7 @@ class UserCredentials(BaseModel):
     password: str
 
 
-@router.post("/token", response_model=Token)
+@router.post("/token", response_model=Token, summary="Login and obtain access token", description="Authenticate user and return an access token. Endpoint is protected and only accessible to authenticated users.")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_async_db)):
     query = select(User).where(User.email == form_data.username)
     result = await db.execute(query)
@@ -39,7 +39,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/register", response_model=Token)
+@router.post("/register", response_model=Token, summary="Register a new user", description="Create a new user account and return an access token. Endpoint is protected and only accessible to authenticated users.")
 async def register_user(credentials: UserCredentials = Body(...), db: AsyncSession = Depends(get_async_db)):
     query = select(User).where(User.email == credentials.email)
     result = await db.execute(query)
@@ -62,6 +62,6 @@ async def register_user(credentials: UserCredentials = Body(...), db: AsyncSessi
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/me")
+@router.get("/me", summary="Get current user information", description="Retrieve the details of the currently authenticated user. Endpoint is protected and only accessible to authenticated users.")
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user

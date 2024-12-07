@@ -15,7 +15,7 @@ headers = {
     "accept": "application/json"
 }
 
-@router.get("/status")
+@router.get("/status", summary="Get API status", description="Ping the CoinGecko API to check if it's up and running.")
 async def get_status() -> StatusResponse:
     async with httpx.AsyncClient() as client:
         response = await client.get(f"https://api.coingecko.com/api/v3/ping", headers=headers)
@@ -31,7 +31,7 @@ async def get_status() -> StatusResponse:
         else:
             raise HTTPException(status_code=response.status_code, detail="Failed to ping CoinGecko API")
 
-@router.get("/coins")
+@router.get("/coins", summary="Get list of coins", description="Retrieve a list of all coins from the CoinGecko API.")
 async def get_coins() -> list[dict]:
     async with httpx.AsyncClient() as client:
         
@@ -46,7 +46,7 @@ async def get_coins() -> list[dict]:
         else:
             raise HTTPException(status_code=response.status_code, detail="Failed to get price from CoinGecko API")
 
-@router.get("/price/{coin}")
+@router.get("/price/{coin}", summary="Get coin price", description="Fetch the current price and market data for a specific coin, and save it to the database. Endpoint is protected and only accessible to authenticated users.")
 async def get_price(
     coin: str = Path(..., description="The coin to get the price for"),
     db: AsyncSession = Depends(get_async_db),
